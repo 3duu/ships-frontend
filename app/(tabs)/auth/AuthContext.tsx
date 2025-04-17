@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { login as apiLogin, register as apiRegister } from '../api/auth';
-import axios from '../api/api';
+import { login as apiLogin, register as apiRegister } from '@/app/(tabs)/api/auth';
+import axios from '@/app/(tabs)/api/api';
 
 interface AuthContextProps {
     userId: string | null;
