@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import * as SecureStore from 'expo-secure-store';
 import { login as apiLogin, register as apiRegister } from '@/app/(tabs)/api/auth';
 import axios from '@/app/(tabs)/api/api';
+import * as SecureStore from '../auth/SafeSecureStore';
 
 interface AuthContextProps {
     userId: string | null;
@@ -77,4 +77,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used inside an AuthProvider');
+    }
+    return context;
+};

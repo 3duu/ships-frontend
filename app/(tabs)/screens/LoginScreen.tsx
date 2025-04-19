@@ -40,6 +40,11 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: { flex: 1, justifyContent: 'center', padding: 20 },
     title: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
+    illustration: {
+        width: '100%',
+        height: 180,
+        marginBottom: 20,
+    },
     input: {
         backgroundColor: '#fff',
         padding: 10,
