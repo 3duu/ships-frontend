@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    Image,
-    Switch,
-} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import AuthHeader from '@/components/Auth/AuthHeader';
+import AuthTextInput from '@/components/Auth/AuthTextInput';
+import RememberMeRow from '@/components/Auth/RememberMeRow';
+import SocialLogins from '@/components/Auth/SocialLogins';
+import SubmitButton from '@/components/Auth/SubmitButton';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useAuth } from '@/app/(tabs)/auth/AuthContext';
 import styles from "react-native-webview/lib/WebView.styles";
 
 export default function LoginScreen() {
+    const router = useRouter();
+    const { login } = useAuth();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-
-    const router = useRouter();
-
-    const handleLogin = () => {
-        console.log('Login with:', email, password);
-    };
 
     const styles = StyleSheet.create({
         container: {
@@ -32,84 +27,64 @@ export default function LoginScreen() {
             padding: 20,
             paddingTop: 60,
         },
-        illustration: {
-            width: '100%',
-            height: 180,
-            marginBottom: 20,
+        register: {
+            color: '#fff',
+            marginTop: 10,
+            textAlign: 'center',
         },
-        // ... rest of your styles
+        link: {
+            textDecorationLine: 'underline',
+            color: '#fff',
+        },
     });
+
+    const handleLogin = async () => {
+        try {
+            await login(email, password);
+            // Redirect or handle post-login logic
+        } catch (err) {
+            console.error('Login failed:', err);
+        }
+    };
 
     return (
         <View style={styles.container}>
-            <Image
-                source={require('../../assets/login-illustration.png')} // replace with your illustration
-                style={styles.illustration}
-                resizeMode="contain"
+            <AuthHeader />
+
+            <AuthTextInput
+                icon="email-outline"
+                placeholder="Email"
+                value={email}
+                autoCapitalize="none"
+                onChangeText={setEmail}
             />
 
-            <Text style={styles.title}>LOGIN</Text>
+            <AuthTextInput
+                icon="lock-outline"
+                placeholder="Password"
+                secure={!showPassword}
+                value={password}
+                onChangeText={setPassword}
+                rightIcon={
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <MaterialCommunityIcons
+                            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                            size={20}
+                            color="#999"
+                        />
+                    </TouchableOpacity>
+                }
+            />
 
-            {/* Email */}
-            <View style={styles.inputContainer}>
-                <MaterialCommunityIcons name="email-outline" size={20} style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    value={email}
-                    autoCapitalize="none"
-                    onChangeText={setEmail}
-                />
-            </View>
+            <RememberMeRow value={rememberMe} onToggle={setRememberMe} />
 
-            {/* Password */}
-            <View style={styles.inputContainer}>
-                <MaterialCommunityIcons name="lock-outline" size={20} style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    secureTextEntry={!showPassword}
-                    value={password}
-                    onChangeText={setPassword}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <MaterialCommunityIcons
-                        name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                        size={20}
-                        style={styles.icon}
-                    />
-                </TouchableOpacity>
-            </View>
+            <SubmitButton title="LOGIN" onPress={handleLogin} />
 
-            {/* Remember + Forgot Password */}
-            <View style={styles.row}>
-                <View style={styles.rememberRow}>
-                    <Switch value={remember} onValueChange={setRemember} />
-                    <Text style={styles.rememberText}>Remember Me</Text>
-                </View>
-                <TouchableOpacity>
-                    <Text style={styles.link}>Forgot Password?</Text>
-                </TouchableOpacity>
-            </View>
-
-            {/* Login button */}
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>LOGIN</Text>
-            </TouchableOpacity>
-
-            {/* OR section */}
-            <Text style={styles.or}>OR</Text>
-            <Text style={styles.socialText}>Log in with</Text>
-
-            <View style={styles.socials}>
-                <FontAwesome name="google" size={32} />
-                <FontAwesome name="apple" size={32} />
-                <FontAwesome name="facebook" size={32} />
-            </View>
+            <SocialLogins />
 
             <TouchableOpacity onPress={() => router.push('/register')}>
                 <Text style={styles.register}>
-                    Don't have an account? <Text style={styles.link}>Register now</Text>
+                    Don’t have an account? <Text style={styles.link}>Register now</Text>
                 </Text>
             </TouchableOpacity>
         </View>

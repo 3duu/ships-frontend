@@ -11,7 +11,7 @@ interface Props extends TextInputProps {
 export default function AuthTextInput({ icon, secure, rightIcon, ...rest }: Props) {
     return (
         <View style={styles.container}>
-            <MaterialCommunityIcons name={icon} size={20} style={styles.icon} />
+            <MaterialCommunityIcons Name={icon} size={20} style={styles.icon} />
             <TextInput style={styles.input} secureTextEntry={secure} {...rest} />
             {rightIcon}
         </View>
