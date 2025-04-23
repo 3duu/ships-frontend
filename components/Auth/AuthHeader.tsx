@@ -4,11 +4,11 @@ import { View, Image, Text, StyleSheet } from 'react-native';
 export default function AuthHeader() {
     return (
         <View style={styles.container}>
-            <Image
-                source={require('../../assets/login-illustration.png')}
+            {/*<Image
+                source={require('../../assets/images/login-illustration.png')}
                 style={styles.image}
                 resizeMode="contain"
-            />
+            />*/}
             <Text style={styles.title}>LOGIN</Text>
         </View>
     );

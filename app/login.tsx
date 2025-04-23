@@ -8,7 +8,7 @@ import SocialLogins from '@/components/Auth/SocialLogins';
 import SubmitButton from '@/components/Auth/SubmitButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '@/app/(tabs)/auth/AuthContext';
-import styles from "react-native-webview/lib/WebView.styles";
+import { ImageBackground } from 'react-native';
 
 export default function LoginScreen() {
     const router = useRouter();
@@ -36,6 +36,19 @@ export default function LoginScreen() {
             textDecorationLine: 'underline',
             color: '#fff',
         },
+        bg: {
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+        },
+        overlay: {
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.6)', // dark overlay for contrast (optional)
+            alignItems: 'center',
+            padding: 20,
+            paddingTop: 60,
+        },
     });
 
     const handleLogin = async () => {
@@ -48,45 +61,54 @@ export default function LoginScreen() {
     };
 
     return (
-        <View style={styles.container}>
-            <AuthHeader />
 
-            <AuthTextInput
-                icon="email-outline"
-                placeholder="Email"
-                value={email}
-                autoCapitalize="none"
-                onChangeText={setEmail}
-            />
+        <ImageBackground
+            source={require('../assets/images/login-illustration.png')} // your background image
+            style={styles.bg}
+            resizeMode="cover"
+        >
 
-            <AuthTextInput
-                icon="lock-outline"
-                placeholder="Password"
-                secure={!showPassword}
-                value={password}
-                onChangeText={setPassword}
-                rightIcon={
-                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <MaterialCommunityIcons
-                            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                            size={20}
-                            color="#999"
-                        />
-                    </TouchableOpacity>
-                }
-            />
+            <View style={styles.container}>
+                <AuthHeader />
 
-            <RememberMeRow value={rememberMe} onToggle={setRememberMe} />
+                <AuthTextInput
+                    icon="email-outline"
+                    placeholder="Email"
+                    value={email}
+                    autoCapitalize="none"
+                    onChangeText={setEmail}
+                />
 
-            <SubmitButton title="LOGIN" onPress={handleLogin} />
+                <AuthTextInput
+                    icon="lock-outline"
+                    placeholder="Password"
+                    secure={!showPassword}
+                    value={password}
+                    onChangeText={setPassword}
+                    rightIcon={
+                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                            <MaterialCommunityIcons
+                                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                                size={20}
+                                color="#999"
+                            />
+                        </TouchableOpacity>
+                    }
+                />
 
-            <SocialLogins />
+                <RememberMeRow value={rememberMe} onToggle={setRememberMe} />
 
-            <TouchableOpacity onPress={() => router.push('/register')}>
-                <Text style={styles.register}>
-                    Don’t have an account? <Text style={styles.link}>Register now</Text>
-                </Text>
-            </TouchableOpacity>
-        </View>
+                <SubmitButton title="LOGIN" onPress={handleLogin} />
+
+                <SocialLogins />
+
+                <TouchableOpacity onPress={() => router.push('/register')}>
+                    <Text style={styles.register}>
+                        Don’t have an account? <Text style={styles.link}>Register now</Text>
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+        </ImageBackground>
     );
 }
