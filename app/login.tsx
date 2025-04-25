@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {View, Text, TouchableOpacity, ImageBackground, KeyboardAvoidingView, Platform} from 'react-native';
 import { useRouter } from 'expo-router';
 import AuthHeader from '@/components/Auth/AuthHeader';
 import AuthTextInput from '@/components/Auth/AuthTextInput';
 import RememberMeRow from '@/components/Auth/RememberMeRow';
-import SocialLogins from '@/components/Auth/SocialLogins';
 import SubmitButton from '@/components/Auth/SubmitButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '@/app/(tabs)/auth/AuthContext';
-import { ImageBackground } from 'react-native';
+import { globalStyles } from '@/app/design/globalStyles';
 
 export default function LoginScreen() {
     const router = useRouter();
@@ -18,38 +17,6 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: '#1f45ef',
-            alignItems: 'center',
-            padding: 20,
-            paddingTop: 60,
-        },
-        register: {
-            color: '#fff',
-            marginTop: 10,
-            textAlign: 'center',
-        },
-        link: {
-            textDecorationLine: 'underline',
-            color: '#fff',
-        },
-        bg: {
-            flex: 1,
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-        },
-        overlay: {
-            flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.6)', // dark overlay for contrast (optional)
-            alignItems: 'center',
-            padding: 20,
-            paddingTop: 60,
-        },
-    });
 
     const handleLogin = async () => {
         try {
@@ -63,52 +30,57 @@ export default function LoginScreen() {
     return (
 
         <ImageBackground
-            source={require('../assets/images/login-illustration.png')} // your background image
-            style={styles.bg}
-            resizeMode="cover"
-        >
+            source={require('../assets/images/login-illustration.png')}
+            style={globalStyles.bg}
+            resizeMode="cover">
 
-            <View style={styles.container}>
-                <AuthHeader />
+            <KeyboardAvoidingView
+                style={globalStyles.overlay}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
 
-                <AuthTextInput
-                    icon="email-outline"
-                    placeholder="Email"
-                    value={email}
-                    autoCapitalize="none"
-                    onChangeText={setEmail}
-                />
+                <View style={globalStyles.bottomContainer}>
+                    <AuthHeader />
 
-                <AuthTextInput
-                    icon="lock-outline"
-                    placeholder="Password"
-                    secure={!showPassword}
-                    value={password}
-                    onChangeText={setPassword}
-                    rightIcon={
-                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                            <MaterialCommunityIcons
-                                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                                size={20}
-                                color="#999"
-                            />
-                        </TouchableOpacity>
-                    }
-                />
+                    <AuthTextInput
+                        icon="email-outline"
+                        placeholder="Email"
+                        value={email}
+                        autoCapitalize="none"
+                        onChangeText={setEmail}
+                    />
 
-                <RememberMeRow value={rememberMe} onToggle={setRememberMe} />
+                    <AuthTextInput
+                        icon="lock-outline"
+                        placeholder="Password"
+                        secure={!showPassword}
+                        value={password}
+                        onChangeText={setPassword}
+                        rightIcon={
+                            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                                <MaterialCommunityIcons
+                                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                                    size={20}
+                                    color="#999"
+                                />
+                            </TouchableOpacity>
+                        }
+                    />
 
-                <SubmitButton title="LOGIN" onPress={handleLogin} />
+                    <RememberMeRow value={rememberMe} onToggle={setRememberMe} />
+                    <SubmitButton title="LOGIN" onPress={handleLogin} />
 
-                <SocialLogins />
-
-                <TouchableOpacity onPress={() => router.push('/register')}>
-                    <Text style={styles.register}>
-                        Don’t have an account? <Text style={styles.link}>Register now</Text>
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
+                    <TouchableOpacity onPress={() => {
+                        console.log('Trying to navigate...');
+                        router.push('/register');
+                    }}>
+                        <Text style={globalStyles.register}>
+                            Don’t have an account?{' '}
+                            <Text style={globalStyles.link}>Register now</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
         </ImageBackground>
+
     );
 }
