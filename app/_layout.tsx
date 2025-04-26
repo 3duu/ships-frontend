@@ -9,7 +9,8 @@ function ProtectedLayout() {
 
     useEffect(() => {
         if (!loading) {
-            const inAuthGroup = segments[0] === 'login' || segments[0] === 'auth';
+            console.log(segments[0]);
+            const inAuthGroup = segments[0] === 'login' || segments[0] === 'auth'|| segments[0] === 'register';
             if (!token && !inAuthGroup) {
                 router.replace('/login');
             }

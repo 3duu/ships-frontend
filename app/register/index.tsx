@@ -1,43 +1,101 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
 import StepAccount from './StepAccount';
 import StepProfile from './StepProfile';
-/*import StepLocation from './StepLocation';
-import StepPhotos from './StepPhotos';*/
+import StepLocation from './StepLocation';
+import StepPhotos from './StepPhotos';
 import {globalStyles} from "@/app/design/globalStyles";
 
+import {
+    View,
+    Text,
+    ImageBackground,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import AuthTextInput from '@/components/Auth/AuthTextInput';
+import SubmitButton from '@/components/Auth/SubmitButton';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { register } from '@/app/(tabs)/api/auth';
+import { useAuth } from '@/app/(tabs)/auth/AuthContext';
 
-/*export default function Register() {
-    const [step, setStep] = useState(0);
+export default function RegisterScreen() {
+    const router = useRouter();
+    const { login } = useAuth();
 
-    // You could also use useReducer or context to collect full user data across steps
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleRegister = () => {
-        console.log('✅ Submit final profile to backend');
-        // Call your API to submit full user profile + photos
+    const handleSubmit = async () => {
+        try {
+            await register(name, email, password);
+            await login(email, password);
+            router.replace('/(tabs)'); // or next step in registration
+        } catch (err) {
+            console.error('Registration failed:', err);
+        }
     };
 
     return (
-        <View>
-            {step === 0 && <StepAccount onNext={() => setStep(1)} />}
-            {step === 1 && (
-                <StepProfile onNext={() => setStep(2)} onBack={() => setStep(0)} />
-            )}
-            {step === 2 && (
-                <StepLocation onNext={() => setStep(3)} onBack={() => setStep(1)} />
-            )}
-            {step === 3 && (
-                <StepPhotos onSubmit={handleRegister} onBack={() => setStep(2)} />
-            )}
-            <Text>Register Screen</Text>
-        </View>
-    );
-}*/
+        <ImageBackground
+            source={require('../../assets/images/register-bg.png')}
+            style={globalStyles.bg}
+            resizeMode="cover"
+        >
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                style={globalStyles.overlay}
+            >
+                <View style={globalStyles.container}>
+                    <Text style={globalStyles.title}>Create Account</Text>
 
-export default function RegisterScreen() {
-    return (
-        <View>
-            <Text>Register Screen</Text>
-        </View>
+                    <AuthTextInput
+                        icon="account"
+                        placeholder="Name"
+                        value={name}
+                        onChangeText={setName}
+                    />
+
+                    <AuthTextInput
+                        icon="email-outline"
+                        placeholder="Email"
+                        value={email}
+                        autoCapitalize="none"
+                        onChangeText={setEmail}
+                    />
+
+                    <AuthTextInput
+                        icon="lock-outline"
+                        placeholder="Password"
+                        secure={!showPassword}
+                        value={password}
+                        onChangeText={setPassword}
+                        rightIcon={
+                            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                                <MaterialCommunityIcons
+                                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                                    size={20}
+                                    color="#999"
+                                />
+                            </TouchableOpacity>
+                        }
+                    />
+
+                    <SubmitButton title="CONTINUE" onPress={handleSubmit} />
+
+                    <TouchableOpacity onPress={() => router.push('/login')}>
+                        <Text style={globalStyles.footer}>
+                            Already have an account?{' '}
+                            <Text style={globalStyles.link}>Login</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </ImageBackground>
     );
 }
+
+
