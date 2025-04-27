@@ -92,6 +92,18 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.4)',
         justifyContent: 'flex-end',
     },
+    bottom: {
+        paddingHorizontal: 24,
+        paddingBottom: 48,
+        alignItems: 'center',
+    },
+    button: {
+        backgroundColor: theme.colors.primary,
+        paddingVertical: theme.spacing.sm,
+        paddingHorizontal: theme.spacing.lg,
+        borderRadius: 30,
+        alignItems: 'center',
+    },
 });
 
 

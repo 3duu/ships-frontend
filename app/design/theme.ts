@@ -28,7 +28,7 @@ const typography = {
 
 export const theme = {
     colors: {
-        primary: '#1f45ef',
+        primary: '#f44336',
         secondary: '#ff477e',
         background: '#f4f4f4',
         text: '#111',

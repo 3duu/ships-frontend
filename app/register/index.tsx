@@ -20,6 +20,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { register } from '@/app/(tabs)/api/auth';
 import { useAuth } from '@/app/(tabs)/auth/AuthContext';
 
+
+
 export default function RegisterScreen() {
     const router = useRouter();
     const { login } = useAuth();
@@ -28,9 +30,11 @@ export default function RegisterScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    let isFormValid = name && email && password;
 
-    const handleSubmit = async () => {
+    const handleNext = async () => {
         try {
+            isFormValid = name && email && password;
             await register(name, email, password);
             await login(email, password);
             router.replace('/(tabs)'); // or next step in registration
@@ -83,13 +87,15 @@ export default function RegisterScreen() {
                             </TouchableOpacity>
                         }
                     />
+                </View>
 
-                    <SubmitButton title="CONTINUE" onPress={handleSubmit} />
+                {/* Bottom Section */}
+                <View style={globalStyles.bottom}>
+                    <SubmitButton title="CONTINUE" onPress={handleNext} disabled={!isFormValid} />
 
                     <TouchableOpacity onPress={() => router.push('/login')}>
                         <Text style={globalStyles.footer}>
-                            Already have an account?{' '}
-                            <Text style={globalStyles.link}>Login</Text>
+                            Already have an account? <Text style={globalStyles.link}>Login</Text>
                         </Text>
                     </TouchableOpacity>
                 </View>
