@@ -37,9 +37,7 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
     };
 
     return (
-        <View style={globalStyles.container}>
-            <Text style={globalStyles.title}>Create Account</Text>
-
+        <View>
             <View style={globalStyles.container}>
                 <Text style={globalStyles.title}>Create Account</Text>
 
@@ -75,6 +73,8 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
                     }
                 />
             </View>
+
+            {/* Bottom Section */}
             <View style={globalStyles.bottom}>
                 <DynamicButton
                     title="Continue"
@@ -85,8 +85,7 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
 
                 <TouchableOpacity onPress={() => router.push('/login')}>
                     <Text style={globalStyles.footer}>
-                        Already have an account?{' '}
-                        <Text style={globalStyles.link}>Login</Text>
+                        Already have an account? <Text style={globalStyles.link}>Login</Text>
                     </Text>
                 </TouchableOpacity>
             </View>

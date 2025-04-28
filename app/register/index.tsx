@@ -37,7 +37,7 @@ export default function RegisterScreen() {
                 style={globalStyles.overlay}
             >
 
-                <View style={globalStyles.container}>
+                <View>
                     {step === 0 && <StepAccount onNext={handleNext} />}
                     {step === 1 && <StepProfile onNext={handleNext} onBack={handleBack} />}
                     {step === 2 && <StepLocation onNext={handleNext} onBack={handleBack} />}
