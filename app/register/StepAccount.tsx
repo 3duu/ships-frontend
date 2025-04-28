@@ -1,38 +1,38 @@
 import React, { useState } from 'react';
-import {View, Text, Alert, TouchableOpacity} from 'react-native';
+import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import DynamicButton from "@/components/DynamicButton";
-import {globalStyles} from "@/app/design/globalStyles";
+import { globalStyles } from "@/app/design/globalStyles";
 import AuthTextInput from '@/components/Auth/AuthTextInput';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
-import {router} from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import {useRegister} from "@/app/register/RegisterContext";
 
 export default function StepAccount({ onNext }: { onNext: () => void }) {
+    const { dispatch } = useRegister();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const isFormValid = name.length > 0 && email.length > 0 && password.length > 0;
+    const isValidEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
+    const isFormValid = name.length > 0 && password.length > 0 && isValidEmail(email);
 
     const handleNextStep = async () => {
         if (!isFormValid) {
-            Alert.alert('Validation Error', 'Please fill in all fields.');
+            Alert.alert('Validation Error', 'Please fill in all fields with valid information.');
             return;
         }
 
         try {
-            setSubmitting(true); // 👈 Start submitting
-
-            // Simulate an API call (you would call your backend here)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // Move to next step
+            setSubmitting(true);
+            await new Promise(resolve => setTimeout(resolve, 2000)); // simulate
+            dispatch({ type: 'SET_ACCOUNT_INFO', payload: { name, email, password } }); // save
             onNext();
         } catch (err) {
             Alert.alert('Error', 'Something went wrong.');
         } finally {
-            setSubmitting(false); // 👈 Stop submitting
+            setSubmitting(false);
         }
     };
 
@@ -74,7 +74,6 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
                 />
             </View>
 
-            {/* Bottom Section */}
             <View style={globalStyles.bottom}>
                 <DynamicButton
                     title="Continue"
@@ -92,4 +91,3 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
         </View>
     );
 }
-

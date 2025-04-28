@@ -132,6 +132,30 @@ export const globalStyles = StyleSheet.create({
     disabledText: {
         color: '#666666',
     },
+    dot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        marginHorizontal: 5,
+    },
+    activeDot: {
+        backgroundColor: '#1f45ef',
+    },
+    inactiveDot: {
+        backgroundColor: '#ccc',
+    },
+    stepIndicatorContainer: {
+        position: 'absolute',
+        top: 60,
+        width: '100%',
+        alignItems: 'center',
+        zIndex: 2,
+    },
+    formContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingTop: 120, // so form doesn't overlap with step dots
+    },
 });
 
 
