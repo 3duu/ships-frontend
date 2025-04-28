@@ -40,51 +40,56 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
         <View style={globalStyles.container}>
             <Text style={globalStyles.title}>Create Account</Text>
 
-            <AuthTextInput
-                icon="account"
-                placeholder="Name"
-                value={name}
-                onChangeText={setName}
-            />
+            <View style={globalStyles.container}>
+                <Text style={globalStyles.title}>Create Account</Text>
 
-            <AuthTextInput
-                icon="email-outline"
-                placeholder="Email"
-                value={email}
-                autoCapitalize="none"
-                onChangeText={setEmail}
-            />
+                <AuthTextInput
+                    icon="account"
+                    placeholder="Name"
+                    value={name}
+                    onChangeText={setName}
+                />
 
-            <AuthTextInput
-                icon="lock-outline"
-                placeholder="Password"
-                secure={!showPassword}
-                value={password}
-                onChangeText={setPassword}
-                rightIcon={
-                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <MaterialCommunityIcons
-                            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                            size={20}
-                            color="#999"
-                        />
-                    </TouchableOpacity>
-                }
-            />
+                <AuthTextInput
+                    icon="email-outline"
+                    placeholder="Email"
+                    value={email}
+                    autoCapitalize="none"
+                    onChangeText={setEmail}
+                />
 
-            <DynamicButton
-                title="Continue"
-                onPress={handleNextStep}
-                disabled={!isFormValid || submitting}
-                loading={submitting}
-            />
+                <AuthTextInput
+                    icon="lock-outline"
+                    placeholder="Password"
+                    secure={!showPassword}
+                    value={password}
+                    onChangeText={setPassword}
+                    rightIcon={
+                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                            <MaterialCommunityIcons
+                                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                                size={20}
+                                color="#999"
+                            />
+                        </TouchableOpacity>
+                    }
+                />
+            </View>
+            <View style={globalStyles.bottom}>
+                <DynamicButton
+                    title="Continue"
+                    onPress={handleNextStep}
+                    disabled={!isFormValid || submitting}
+                    loading={submitting}
+                />
 
-            <TouchableOpacity onPress={() => router.push('/login')}>
-                <Text style={globalStyles.footer}>
-                    Already have an account?{' '}
-                    <Text style={globalStyles.link}>Login</Text>
-                </Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push('/login')}>
+                    <Text style={globalStyles.footer}>
+                        Already have an account?{' '}
+                        <Text style={globalStyles.link}>Login</Text>
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
