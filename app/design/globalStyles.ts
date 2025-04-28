@@ -1,6 +1,15 @@
 import {StyleSheet} from "react-native";
 import { theme } from './theme';
 
+const buttonBase = {
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+};
+
 export const globalStyles = StyleSheet.create({
     title: {
         fontSize: 22,
@@ -49,9 +58,9 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    heading: {
+    heading1: {
         fontSize: theme.typography.fontSize.lg,
-        fontWeight: theme.typography.fontWeight.bold,
+        /*fontWeight: theme.typography.fontWeight.bold,*/
         color: theme.colors.text,
         marginBottom: theme.spacing.md,
     },
@@ -99,10 +108,29 @@ export const globalStyles = StyleSheet.create({
     },
     button: {
         backgroundColor: theme.colors.primary,
-        paddingVertical: theme.spacing.sm,
-        paddingHorizontal: theme.spacing.lg,
-        borderRadius: 30,
+        paddingVertical: buttonBase.paddingVertical,
+        paddingHorizontal: buttonBase.paddingHorizontal,
+        borderRadius: buttonBase.borderRadius,
         alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
+    buttonDynamic: {
+        paddingVertical: buttonBase.paddingVertical,
+        paddingHorizontal: buttonBase.paddingHorizontal,
+        borderRadius: buttonBase.borderRadius,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
+    disabledButton: {
+        backgroundColor: theme.colors.gray,
+    },
+    enabledButton: {
+        backgroundColor: theme.colors.primary,
+    },
+    disabledText: {
+        color: '#666666',
     },
 });
 

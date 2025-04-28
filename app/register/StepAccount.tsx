@@ -1,56 +1,91 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
-import { register } from '@/app/(tabs)/api/auth';
-import { useAuth } from '@/app/(tabs)/auth/AuthContext';
+import {View, Text, Alert, TouchableOpacity} from 'react-native';
+import DynamicButton from "@/components/DynamicButton";
+import {globalStyles} from "@/app/design/globalStyles";
+import AuthTextInput from '@/components/Auth/AuthTextInput';
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {router} from "expo-router";
 
 export default function StepAccount({ onNext }: { onNext: () => void }) {
-    const { login } = useAuth(); // to store token after register
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async () => {
-       /* try {
-            const res = await register(name, email, password);
-            await login(email, password); // immediately log in
-            onNext();
-        } catch (err) {
-            Alert.alert('Error', 'Registration failed');
-        }*/
+    const isFormValid = name.length > 0 && email.length > 0 && password.length > 0;
 
-        if (!name || !email || !password) {
+    const handleNextStep = async () => {
+        if (!isFormValid) {
             Alert.alert('Validation Error', 'Please fill in all fields.');
             return;
         }
 
         try {
-            const res = await register(name, email, password); // your register API call
-            await login(email, password); // auto-login after register
-            onNext(); // move to next step
-        } catch (err: any) {
-            console.error('Registration failed:', err);
+            setSubmitting(true); // 👈 Start submitting
 
-            let message = 'Something went wrong. Please try again.';
+            // Simulate an API call (you would call your backend here)
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
-            if (err.response && err.response.data && err.response.data.error) {
-                // if backend sends proper { "error": "message" }
-                message = err.response.data.error;
-            }
-
-            Alert.alert('Registration Error', message);
+            // Move to next step
+            onNext();
+        } catch (err) {
+            Alert.alert('Error', 'Something went wrong.');
+        } finally {
+            setSubmitting(false); // 👈 Stop submitting
         }
-
     };
 
     return (
-        <View>
-            <Text>Name</Text>
-            <TextInput value={name} onChangeText={setName} />
-            <Text>Email</Text>
-            <TextInput value={email} onChangeText={setEmail} autoCapitalize="none" />
-            <Text>Password</Text>
-            <TextInput value={password} onChangeText={setPassword} secureTextEntry />
-            <Button title="Continue" onPress={handleSubmit} />
+        <View style={globalStyles.container}>
+            <Text style={globalStyles.title}>Create Account</Text>
+
+            <AuthTextInput
+                icon="account"
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+            />
+
+            <AuthTextInput
+                icon="email-outline"
+                placeholder="Email"
+                value={email}
+                autoCapitalize="none"
+                onChangeText={setEmail}
+            />
+
+            <AuthTextInput
+                icon="lock-outline"
+                placeholder="Password"
+                secure={!showPassword}
+                value={password}
+                onChangeText={setPassword}
+                rightIcon={
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <MaterialCommunityIcons
+                            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                            size={20}
+                            color="#999"
+                        />
+                    </TouchableOpacity>
+                }
+            />
+
+            <DynamicButton
+                title="Continue"
+                onPress={handleNextStep}
+                disabled={!isFormValid || submitting}
+                loading={submitting}
+            />
+
+            <TouchableOpacity onPress={() => router.push('/login')}>
+                <Text style={globalStyles.footer}>
+                    Already have an account?{' '}
+                    <Text style={globalStyles.link}>Login</Text>
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 }
+

@@ -7,43 +7,26 @@ import {globalStyles} from "@/app/design/globalStyles";
 
 import {
     View,
-    Text,
     ImageBackground,
-    TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import AuthTextInput from '@/components/Auth/AuthTextInput';
-import SubmitButton from '@/components/Auth/SubmitButton';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { register } from '@/app/(tabs)/api/auth';
-import { useAuth } from '@/app/(tabs)/auth/AuthContext';
 
 
 
 export default function RegisterScreen() {
-    const router = useRouter();
-    const { login } = useAuth();
+    const [step, setStep] = useState(0);
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    let isFormValid = name && email && password;
+    const handleNext = () => {
+        setStep((prevStep) => prevStep + 1);
+    };
 
-    const handleNext = async () => {
-        try {
-            isFormValid = name && email && password;
-            await register(name, email, password);
-            await login(email, password);
-            router.replace('/(tabs)'); // or next step in registration
-        } catch (err) {
-            console.error('Registration failed:', err);
-        }
+    const handleBack = () => {
+        setStep((prevStep) => Math.max(prevStep - 1, 0));
     };
 
     return (
+
         <ImageBackground
             source={require('../../assets/images/register-bg.png')}
             style={globalStyles.bg}
@@ -53,51 +36,12 @@ export default function RegisterScreen() {
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 style={globalStyles.overlay}
             >
+
                 <View style={globalStyles.container}>
-                    <Text style={globalStyles.title}>Create Account</Text>
-
-                    <AuthTextInput
-                        icon="account"
-                        placeholder="Name"
-                        value={name}
-                        onChangeText={setName}
-                    />
-
-                    <AuthTextInput
-                        icon="email-outline"
-                        placeholder="Email"
-                        value={email}
-                        autoCapitalize="none"
-                        onChangeText={setEmail}
-                    />
-
-                    <AuthTextInput
-                        icon="lock-outline"
-                        placeholder="Password"
-                        secure={!showPassword}
-                        value={password}
-                        onChangeText={setPassword}
-                        rightIcon={
-                            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                                <MaterialCommunityIcons
-                                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                                    size={20}
-                                    color="#999"
-                                />
-                            </TouchableOpacity>
-                        }
-                    />
-                </View>
-
-                {/* Bottom Section */}
-                <View style={globalStyles.bottom}>
-                    <SubmitButton title="CONTINUE" onPress={handleNext} disabled={!isFormValid} />
-
-                    <TouchableOpacity onPress={() => router.push('/login')}>
-                        <Text style={globalStyles.footer}>
-                            Already have an account? <Text style={globalStyles.link}>Login</Text>
-                        </Text>
-                    </TouchableOpacity>
+                    {step === 0 && <StepAccount onNext={handleNext} />}
+                    {step === 1 && <StepProfile onNext={handleNext} onBack={handleBack} />}
+                    {step === 2 && <StepLocation onNext={handleNext} onBack={handleBack} />}
+                    {step === 3 && <StepPhotos onBack={handleBack} />}
                 </View>
             </KeyboardAvoidingView>
         </ImageBackground>
