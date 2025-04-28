@@ -156,6 +156,21 @@ export const globalStyles = StyleSheet.create({
         justifyContent: 'center',
         paddingTop: 120, // so form doesn't overlap with step dots
     },
+    dateButton: {
+        backgroundColor: '#fff',
+        padding: 14,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginVertical: 16,
+    },
+    dateButtonText: {
+        color: '#999',
+    },
+    optionSelected: {
+        backgroundColor: '#dceeff',
+        borderColor: '#1f45ef',
+        borderWidth: 1,
+    },
 });
 
 

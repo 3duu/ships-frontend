@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import StepAccount from './StepAccount';
 import StepProfile from './StepProfile';
-import StepLocation from './StepLocation';
-import StepPhotos from './StepPhotos';
+/*import StepLocation from './StepLocation';
+import StepPhotos from './StepPhotos';*/
 import StepIndicator from '@/components/StepIndicator';
 import { View, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native';
 import { globalStyles } from "@/app/design/globalStyles";
@@ -26,37 +26,20 @@ export default function RegisterScreen() {
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     style={globalStyles.overlay}
                 >
-                   {/* <View style={{ flex: 1 }}>*/}
+                   <View style={{ flex: 1 }}>
                         {/* Move StepIndicator here */}
                         <View style={globalStyles.stepIndicatorContainer}>
                             <StepIndicator step={step} totalSteps={4} />
                         </View>
 
-                        {/* Form Steps with animation */}
-                        {/*<AnimatedStep step={0} currentStep={step}>
-                            <StepAccount onNext={handleNext} />
-                        </AnimatedStep>
+                    <AnimatedStep step={0} currentStep={0}>
+                        <StepAccount onNext={handleNext} />
+                    </AnimatedStep>
+                   <AnimatedStep step={1} currentStep={0}>
+                       <StepProfile onNext={handleNext} onBack={handleBack} />
+                   </AnimatedStep>
 
-                        <AnimatedStep step={1} currentStep={step}>
-                            <StepProfile onNext={handleNext} onBack={handleBack} />
-                        </AnimatedStep>
-
-                        <AnimatedStep step={2} currentStep={step}>
-                            <StepLocation onNext={handleNext} onBack={handleBack} />
-                        </AnimatedStep>
-
-                        <AnimatedStep step={3} currentStep={step}>
-                            <StepPhotos onBack={handleBack} />
-                        </AnimatedStep>*/}
-
-                        {/* Form Content */}
-                        <View style={globalStyles.formContainer}>
-                            {step === 0 && <StepAccount onNext={handleNext} />}
-                            {step === 1 && <StepProfile onNext={handleNext} onBack={handleBack} />}
-                            {step === 2 && <StepLocation onNext={handleNext} onBack={handleBack} />}
-                            {step === 3 && <StepPhotos onBack={handleBack} />}
-                        </View>
-                    {/*</View>*/}
+                    </View>
                 </KeyboardAvoidingView>
             </ImageBackground>
         </RegisterProvider>
