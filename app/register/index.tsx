@@ -32,12 +32,13 @@ export default function RegisterScreen() {
                             <StepIndicator step={step} totalSteps={4} />
                         </View>
 
-                    <AnimatedStep step={0} currentStep={0}>
-                        <StepAccount onNext={handleNext} />
-                    </AnimatedStep>
-                   <AnimatedStep step={1} currentStep={0}>
-                       <StepProfile onNext={handleNext} onBack={handleBack} />
-                   </AnimatedStep>
+                       <AnimatedStep step={0} currentStep={step}>
+                           <StepAccount onNext={handleNext} />
+                       </AnimatedStep>
+
+                       <AnimatedStep step={1} currentStep={step}>
+                           <StepProfile onNext={handleNext} onBack={handleBack} />
+                       </AnimatedStep>
 
                     </View>
                 </KeyboardAvoidingView>

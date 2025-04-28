@@ -19,11 +19,12 @@ export async function logout(): Promise<void> {
     return Promise.resolve();
 }
 
-export const register = async (name: string, email: string, password: string) => {
+export async function registerAccount(name: string, email: string, password: string) {
     const response = await axios.post('/auth/register', {
         name,
         email,
         password,
     });
-    return response.data; // token + userId
-};
+
+    return response.data; // { token, userId }
+}

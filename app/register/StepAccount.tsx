@@ -6,6 +6,7 @@ import AuthTextInput from '@/components/Auth/AuthTextInput';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import {useRegister} from "@/app/register/RegisterContext";
+import {registerAccount} from "@/app/(tabs)/api/auth";
 
 export default function StepAccount({ onNext }: { onNext: () => void }) {
     const { dispatch } = useRegister();
@@ -26,11 +27,24 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
 
         try {
             setSubmitting(true);
-            await new Promise(resolve => setTimeout(resolve, 2000)); // simulate
-            dispatch({ type: 'SET_ACCOUNT_INFO', payload: { name, email, password } }); // save
+
+            const response = await registerAccount(name, email, password);
+
+            // Optional: Save the token if needed
+            // await SecureStore.setItemAsync('authToken', response.token);
+
+            dispatch({ type: 'SET_ACCOUNT_INFO', payload: { name, email, password } });
+
             onNext();
-        } catch (err) {
-            Alert.alert('Error', 'Something went wrong.');
+        } catch (err: any) {
+            console.error('Registration error:', err.response?.data || err.message);
+
+            let message = 'Something went wrong. Please try again.';
+            if (err.response && err.response.data && err.response.data.error) {
+                message = err.response.data.error;
+            }
+
+            Alert.alert('Registration Error', message);
         } finally {
             setSubmitting(false);
         }
