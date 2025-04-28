@@ -139,10 +139,10 @@ export const globalStyles = StyleSheet.create({
         marginHorizontal: 5,
     },
     activeDot: {
-        backgroundColor: '#1f45ef',
+        backgroundColor: theme.colors.primary,
     },
     inactiveDot: {
-        backgroundColor: '#ccc',
+        backgroundColor: theme.colors.gray,
     },
     stepIndicatorContainer: {
         position: 'absolute',
