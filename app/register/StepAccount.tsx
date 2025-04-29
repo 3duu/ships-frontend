@@ -3,10 +3,7 @@ import {
     View,
     Text,
     ScrollView,
-    KeyboardAvoidingView,
-    Platform,
     TouchableOpacity,
-    StyleSheet,
     SafeAreaView,
     Alert
 } from 'react-native';
@@ -19,7 +16,7 @@ import {globalStyles} from "@/app/design/globalStyles";
 import {registerAccount} from "@/app/(tabs)/api/auth";
 
 
-export default function StepAccount({ onNext }: { onNext: () => void }) {
+export default function StepAccount({ onNext }: Readonly<{ onNext: () => void }>) {
     const { dispatch } = useRegister();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -62,15 +59,16 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
     };
 
     return (
-        <SafeAreaView style={styles.safe}>
-            <KeyboardAvoidingView
-                style={styles.wrapper}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            >
-                <View style={styles.wrapper}>
-                    {/* Scrollable form area */}
+        <SafeAreaView style={{ flex: 1 }}>
+
+                <View style={{ flex: 1, justifyContent: 'space-between' }}>
                     <ScrollView
-                        contentContainerStyle={styles.scrollContent}
+                        contentContainerStyle={{
+                            paddingHorizontal: 24,
+                            paddingTop: 48,
+                            paddingBottom: 0,
+                            flexGrow: 1,
+                        }}
                         keyboardShouldPersistTaps="handled"
                     >
                         <Text style={globalStyles.title}>Create Account</Text>
@@ -108,8 +106,8 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
                         />
                     </ScrollView>
 
-                    {/* Fixed bottom button area */}
-                    <View style={styles.bottomContainer}>
+                    {/* Fixed bottom section */}
+                    <View style={{ paddingHorizontal: 24, paddingBottom: 32 }}>
                         <DynamicButton
                             title="Continue"
                             onPress={handleNextStep}
@@ -124,29 +122,8 @@ export default function StepAccount({ onNext }: { onNext: () => void }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </KeyboardAvoidingView>
+
         </SafeAreaView>
+
     );
 }
-
-const styles = StyleSheet.create({
-    safe: {
-        flex: 1,
-        backgroundColor: 'transparent', // or use ImageBackground behind it
-    },
-    wrapper: {
-        flex: 1,
-        justifyContent: 'space-between',
-    },
-    scrollContent: {
-        paddingHorizontal: 24,
-        paddingTop: 24,
-        flexGrow: 1,
-    },
-    bottomContainer: {
-        paddingHorizontal: 24,
-        paddingBottom: 32,
-        paddingTop: 12,
-        backgroundColor: 'transparent',
-    },
-});

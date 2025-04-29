@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Dimensions, StyleSheet } from 'react-native'; // ✅ use react-native Animated here!
+import { View, Animated, Dimensions, StyleSheet } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -9,7 +9,7 @@ interface Props {
     currentStep: number;
 }
 
-export default function AnimatedStep({ children, step, currentStep }: Props) {
+export default function AnimatedStep({ children, step, currentStep }: Readonly<Props>) {
     const offset = React.useRef(new Animated.Value((step - currentStep) * width)).current;
 
     React.useEffect(() => {
@@ -20,17 +20,26 @@ export default function AnimatedStep({ children, step, currentStep }: Props) {
         }).start();
     }, [currentStep]);
 
+    const animatedStyle = {
+        transform: [{ translateX: offset }],
+    };
+
     return (
-        <Animated.View style={[styles.container, { transform: [{ translateX: offset }] }]}>
-            {children}
-        </Animated.View>
+        <View style={styles.outerContainer}>
+            <Animated.View style={[styles.innerContainer, animatedStyle]}>
+                {children}
+            </Animated.View>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        width: width,
-        paddingHorizontal: 24,
+    outerContainer: {
+        flex: 1, // ✅ outer View controls height layout
+        width: '100%',
+    },
+    innerContainer: {
+        flex: 1, // ✅ inner Animated.View also flexes full
+        width: '100%',
     },
 });
