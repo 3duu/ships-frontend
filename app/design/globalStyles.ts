@@ -102,9 +102,10 @@ export const globalStyles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     bottom: {
-        paddingHorizontal: 24,
-        paddingBottom: 48,
+        padding: 24,
+        backgroundColor: 'transparent',
         alignItems: 'center',
+        justifyContent: 'flex-end',
     },
     button: {
         backgroundColor: theme.colors.primary,
@@ -171,6 +172,10 @@ export const globalStyles = StyleSheet.create({
         borderColor: '#1f45ef',
         borderWidth: 1,
     },
+    scrollContent: {
+        padding: 24,
+        flexGrow: 1,
+    }
 });
 
 
