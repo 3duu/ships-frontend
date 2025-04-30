@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { login as apiLogin, registerAccount as apiRegister } from '@/app/(tabs)/api/auth';
+import {login as apiLogin, logoutFromServer, registerAccount as apiRegister} from '@/app/(tabs)/api/auth';
 import axios from '@/app/(tabs)/api/api';
 import * as SecureStore from '../auth/SafeSecureStore';
 import {router} from "expo-router";
@@ -69,11 +69,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = async () => {
-        setToken(null);
-        setUserId(null);
+        try {
+            await logoutFromServer();
+        } catch (err) {
+            console.warn('Logout error:', err); // non-blocking
+        }
+
         delete axios.defaults.headers.common['Authorization'];
         await SecureStore.deleteItemAsync('authToken');
         await SecureStore.deleteItemAsync('refreshToken');
+        await SecureStore.deleteItemAsync('userID');
 
         router.replace('/login');
     };

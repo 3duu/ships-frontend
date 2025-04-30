@@ -13,9 +13,8 @@ export async function verifyEmail(token: string): Promise<void> {
     return response.data;
 }
 
-export async function logout(): Promise<void> {
-    // Optional backend call to invalidate token
-    return Promise.resolve();
+export async function logoutFromServer() {
+    return axios.post('/auth/logout'); // or DELETE if you prefer
 }
 
 export async function registerAccount(name: string, email: string, password: string) {
