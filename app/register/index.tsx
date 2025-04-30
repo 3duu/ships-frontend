@@ -26,21 +26,20 @@ export default function RegisterScreen() {
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     style={globalStyles.overlay}
                 >
-                   <View style={{ flex: 1 }}>
-                        {/* Move StepIndicator here */}
-                        <View style={globalStyles.stepIndicatorContainer}>
-                            <StepIndicator step={step} totalSteps={4} />
-                        </View>
 
-                       <AnimatedStep step={0} currentStep={step}>
-                           <StepAccount onNext={handleNext} />
-                       </AnimatedStep>
+                {/* Move StepIndicator here */}
+                <View style={globalStyles.stepIndicatorContainer}>
+                    <StepIndicator step={step} totalSteps={4} />
+                </View>
 
-                       <AnimatedStep step={1} currentStep={step}>
-                           <StepProfile onNext={handleNext} onBack={handleBack} />
-                       </AnimatedStep>
+               <AnimatedStep step={0} currentStep={step}>
+                   <StepAccount onNext={handleNext} />
+               </AnimatedStep>
 
-                    </View>
+               <AnimatedStep step={1} currentStep={step}>
+                   <StepProfile onNext={handleNext} onBack={handleBack} />
+               </AnimatedStep>
+
                 </KeyboardAvoidingView>
             </ImageBackground>
         </RegisterProvider>

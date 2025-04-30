@@ -98,7 +98,7 @@ export const globalStyles = StyleSheet.create({
     },
     overlay: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.4)',
+        backgroundColor: 'rgba(0,0,0,0.2)',
         justifyContent: 'flex-end',
     },
     bottom: {
@@ -109,14 +109,6 @@ export const globalStyles = StyleSheet.create({
     },
     button: {
         backgroundColor: theme.colors.primary,
-        paddingVertical: buttonBase.paddingVertical,
-        paddingHorizontal: buttonBase.paddingHorizontal,
-        borderRadius: buttonBase.borderRadius,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-    },
-    buttonDynamic: {
         paddingVertical: buttonBase.paddingVertical,
         paddingHorizontal: buttonBase.paddingHorizontal,
         borderRadius: buttonBase.borderRadius,

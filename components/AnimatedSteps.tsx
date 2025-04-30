@@ -24,9 +24,11 @@ export default function AnimatedStep({ children, step, currentStep }: Readonly<P
         transform: [{ translateX: offset }],
     };
 
+    const isActive = step === currentStep;
+
     return (
-        <View style={styles.outerContainer}>
-            <Animated.View style={[styles.innerContainer, animatedStyle]}>
+        <View style={[styles.wrapper, !isActive && styles.hidden]}>
+            <Animated.View style={[styles.container, animatedStyle]}>
                 {children}
             </Animated.View>
         </View>
@@ -34,12 +36,20 @@ export default function AnimatedStep({ children, step, currentStep }: Readonly<P
 }
 
 const styles = StyleSheet.create({
-    outerContainer: {
-        flex: 1, // ✅ outer View controls height layout
+    wrapper: {
+        flex: 1,
         width: '100%',
     },
-    innerContainer: {
-        flex: 1, // ✅ inner Animated.View also flexes full
+    hidden: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        // Hides non-active steps from layout
+    },
+    container: {
+        flex: 1,
         width: '100%',
     },
 });

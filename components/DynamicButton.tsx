@@ -19,7 +19,7 @@ export default function DynamicButton({ title, disabled = false, loading = false
             {...props}
         >
             <View style={[
-                globalStyles.buttonDynamic, // shared layout
+                globalStyles.button, // shared layout
                 { backgroundColor },        // dynamic color
                 style,
             ]}>

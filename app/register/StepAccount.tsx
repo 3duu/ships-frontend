@@ -14,6 +14,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {useRegister} from "@/app/register/RegisterContext";
 import {globalStyles} from "@/app/design/globalStyles";
 import {registerAccount} from "@/app/(tabs)/api/auth";
+import { handleApiError } from '@/app/utils/errors';
 
 
 export default function StepAccount({ onNext }: Readonly<{ onNext: () => void }>) {
@@ -45,14 +46,7 @@ export default function StepAccount({ onNext }: Readonly<{ onNext: () => void }>
 
             onNext();
         } catch (err: any) {
-            console.error('Registration error:', err.response?.data || err.message);
-
-            let message = 'Something went wrong. Please try again.';
-            if (err.response && err.response.data && err.response.data.error) {
-                message = err.response.data.error;
-            }
-
-            Alert.alert('Registration Error', message);
+            handleApiError(err);
         } finally {
             setSubmitting(false);
         }
@@ -60,68 +54,65 @@ export default function StepAccount({ onNext }: Readonly<{ onNext: () => void }>
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: 'space-between' }}>
+                <ScrollView
+                    contentContainerStyle={{
+                        paddingHorizontal: 24,
+                        paddingTop: 48,
+                        flexGrow: 1,
+                    }}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    <Text style={globalStyles.title}>Create Account</Text>
 
-                <View style={{ flex: 1, justifyContent: 'space-between' }}>
-                    <ScrollView
-                        contentContainerStyle={{
-                            paddingHorizontal: 24,
-                            paddingTop: 48,
-                            paddingBottom: 0,
-                            flexGrow: 1,
-                        }}
-                        keyboardShouldPersistTaps="handled"
-                    >
-                        <Text style={globalStyles.title}>Create Account</Text>
+                    <AuthTextInput
+                        icon="account"
+                        placeholder="Name"
+                        value={name}
+                        onChangeText={setName}
+                    />
 
-                        <AuthTextInput
-                            icon="account"
-                            placeholder="Name"
-                            value={name}
-                            onChangeText={setName}
-                        />
+                    <AuthTextInput
+                        icon="email-outline"
+                        placeholder="Email"
+                        value={email}
+                        onChangeText={setEmail}
+                        autoCapitalize="none"
+                    />
 
-                        <AuthTextInput
-                            icon="email-outline"
-                            placeholder="Email"
-                            value={email}
-                            onChangeText={setEmail}
-                            autoCapitalize="none"
-                        />
+                    <AuthTextInput
+                        icon="lock-outline"
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={setPassword}
+                        secure={!showPassword}
+                        rightIcon={
+                            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                                <MaterialCommunityIcons
+                                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                                    size={20}
+                                    color="#999"
+                                />
+                            </TouchableOpacity>
+                        }
+                    />
+                </ScrollView>
 
-                        <AuthTextInput
-                            icon="lock-outline"
-                            placeholder="Password"
-                            value={password}
-                            onChangeText={setPassword}
-                            secure={!showPassword}
-                            rightIcon={
-                                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                                    <MaterialCommunityIcons
-                                        name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                                        size={20}
-                                        color="#999"
-                                    />
-                                </TouchableOpacity>
-                            }
-                        />
-                    </ScrollView>
+                <View style={globalStyles.bottomContainer}>
+                    <DynamicButton
+                        title="Continue"
+                        onPress={handleNextStep}
+                        disabled={!isFormValid || submitting}
+                        loading={submitting}
+                    />
 
-                    {/* Fixed bottom section */}
-                    <View style={{ paddingHorizontal: 24, paddingBottom: 32 }}>
-                        <DynamicButton
-                            title="Continue"
-                            onPress={handleNextStep}
-                            disabled={!isFormValid || submitting}
-                            loading={submitting}
-                        />
-
-                        <TouchableOpacity onPress={() => router.push('/login')}>
-                            <Text style={globalStyles.footer}>
-                                Already have an account? <Text style={globalStyles.link}>Login</Text>
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => router.push('/login')}>
+                        <Text style={globalStyles.footer}>
+                            Already have an account? <Text style={globalStyles.link}>Login</Text>
+                        </Text>
+                    </TouchableOpacity>
                 </View>
+            </View>
 
         </SafeAreaView>
 
