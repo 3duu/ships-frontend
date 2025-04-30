@@ -5,13 +5,9 @@ interface LoginResponse {
     userId: string;
 }
 
-export async function login(email: string, password: string): Promise<LoginResponse> {
-    const response = await axios.post('/auth/login', { email, password });
-    return response.data;
-}
-
 export async function verifyEmail(token: string): Promise<void> {
-    await axios.post('/auth/verify-email', { token });
+    const response = await axios.post('/auth/verify-email', { token });
+    return response.data;
 }
 
 export async function logout(): Promise<void> {
@@ -20,11 +16,11 @@ export async function logout(): Promise<void> {
 }
 
 export async function registerAccount(name: string, email: string, password: string) {
-    const response = await axios.post('/auth/register', {
-        name,
-        email,
-        password,
-    });
+    const response = await axios.post('/auth/register', { name, email, password });
+    return response.data; // { token, userId }
+}
 
+export async function login(email: string, password: string): Promise<LoginResponse> {
+    const response = await axios.post('/auth/login', { email, password });
     return response.data; // { token, userId }
 }
