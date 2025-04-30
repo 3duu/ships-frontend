@@ -2,6 +2,8 @@ import axios from 'axios';
 import { handleApiError } from '@/app/utils/errors';
 import * as SecureStore from 'expo-secure-store';
 import { refreshToken as requestRefreshToken } from './auth';
+import {useExternalLogout} from "@/app/(tabs)/auth/AuthContext";
+import Toast from "react-native-toast-message";
 
 const api = axios.create({
     baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:4000/api',
@@ -78,7 +80,21 @@ api.interceptors.response.use(
                 processQueue(refreshErr, null);
                 await SecureStore.deleteItemAsync('authToken');
                 await SecureStore.deleteItemAsync('refreshToken');
-                handleApiError(refreshErr);
+
+                Toast.show({
+                    type: 'error',
+                    text1: 'Session Expired',
+                    text2: 'Please log in again.',
+                });
+
+                setTimeout(() => {
+                    const logout = useExternalLogout();
+                    logout();
+                }, 1500); // 1.5s delay so user sees toast
+
+                const logout = useExternalLogout();
+                logout();
+
                 return Promise.reject(refreshErr);
             } finally {
                 isRefreshing = false;

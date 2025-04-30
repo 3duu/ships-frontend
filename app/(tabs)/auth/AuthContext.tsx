@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { login as apiLogin, register as apiRegister } from '@/app/(tabs)/api/auth';
+import { login as apiLogin, registerAccount as apiRegister } from '@/app/(tabs)/api/auth';
 import axios from '@/app/(tabs)/api/api';
 import * as SecureStore from '../auth/SafeSecureStore';
+import {router} from "expo-router";
+
 
 interface AuthContextProps {
     userId: string | null;
@@ -20,6 +22,10 @@ const AuthContext = createContext<AuthContextProps>({
     logout: () => {},
     loading: true,
 });
+
+let externalLogout: () => void = () => {};
+
+export const useExternalLogout = () => externalLogout;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [userId, setUserId] = useState<string | null>(null);
@@ -67,8 +73,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUserId(null);
         delete axios.defaults.headers.common['Authorization'];
         await SecureStore.deleteItemAsync('authToken');
-        await SecureStore.deleteItemAsync('userId');
+        await SecureStore.deleteItemAsync('refreshToken');
+
+        router.replace('/login');
     };
+
+    externalLogout = logout;
 
     return (
         <AuthContext.Provider value={{ userId, token, login, register, logout, loading }}>
@@ -84,3 +94,5 @@ export const useAuth = () => {
     }
     return context;
 };
+
+

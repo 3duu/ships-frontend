@@ -1,6 +1,7 @@
 import { Slot, useRouter, useSegments } from 'expo-router';
 import {AuthProvider, useAuth} from '@/app/(tabs)/auth/AuthContext';
 import { useEffect } from 'react';
+import AuthGuard from "@/app/(tabs)/auth/AuthGuard";
 
 function ProtectedLayout() {
     const { token, loading } = useAuth();
@@ -26,7 +27,9 @@ function ProtectedLayout() {
 export default function Layout() {
     return (
         <AuthProvider>
-            <ProtectedLayout />
+            <AuthGuard>
+                <Slot />
+            </AuthGuard>
         </AuthProvider>
     );
 }
