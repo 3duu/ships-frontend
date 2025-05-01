@@ -32,25 +32,26 @@ export async function verifyEmail(token: string): Promise<void> {
 }
 
 export async function logoutFromServer() {
-    return axios.post('/auth/logout'); // or DELETE if you prefer
+    return axios.post('auth/auth/logout');
 }
 
 export async function registerAccount(name: string, email: string, password: string) {
-    const response : LoginResponse  = await axios.post('/auth/register', { name, email, password });
+    const response : LoginResponse  = await axios.post('public/auth/register', { name, email, password });
     await SecureStore.setItemAsync('authToken', response.token);
     await SecureStore.setItemAsync('refreshToken', response.refreshToken);
-    return response.user; // { token, userId }
+    return response;
 }
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
-    const response : LoginResponse = await axios.post('/auth/login', { email, password });
+    const response : LoginResponse = await axios.post('public/auth/login', { email, password });
     await SecureStore.setItemAsync('authToken', response.token);
+    await SecureStore.setItemAsync('userId', response.user.id);
     await SecureStore.setItemAsync('refreshToken', response.refreshToken);
-    return response; // { token, userId }
+    return response;
 }
 
 export async function refreshToken(refreshToken: string) {
-    const response = await axios.post('/auth/refresh', {
+    const response = await axios.post('auth/auth/refresh', {
         refreshToken,
     });
 

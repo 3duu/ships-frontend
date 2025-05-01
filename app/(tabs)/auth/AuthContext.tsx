@@ -53,21 +53,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const res = await apiLogin(email, password);
 
         setToken(res.token);
-        setUserId(res.userId);
+        setUserId(res.user.id);
         axios.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
 
         await SecureStore.setItemAsync('authToken', res.token);
-        await SecureStore.setItemAsync('userId', res.userId);
+        await SecureStore.setItemAsync('userId', res.user.id);
     };
 
     const register = async (name: string, email: string, password: string) => {
         const res = await apiRegister(name, email, password);
         setToken(res.token);
-        setUserId(res.userId);
+        setUserId(res.user.id);
         axios.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
 
         await SecureStore.setItemAsync('authToken', res.token);
-        await SecureStore.setItemAsync('userId', res.userId);
+        await SecureStore.setItemAsync('userId', res.user.id);
     };
 
     const logout = async () => {

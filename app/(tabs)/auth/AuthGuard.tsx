@@ -2,7 +2,7 @@ import { useAuth } from './AuthContext';
 import { useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 
-export default function AuthGuard({ children }: { children: React.ReactNode }) {
+export default function AuthGuard({ children }: Readonly<{ children: React.ReactNode }>) {
     const { token, loading } = useAuth();
     const segments = useSegments();
     const router = useRouter();

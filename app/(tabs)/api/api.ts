@@ -6,7 +6,10 @@ import {useExternalLogout} from "@/app/(tabs)/auth/AuthContext";
 import Toast from "react-native-toast-message";
 
 const api = axios.create({
-    baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:4000/api',
+    baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080/api', // update for your backend URL
+    headers: {
+        'Content-Type': 'application/json',
+    },
     timeout: 10000,
 });
 
@@ -22,18 +25,31 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 // Request interceptor to attach token
-api.interceptors.request.use(async (config) => {
-    const token = await SecureStore.getItemAsync('authToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
+api.interceptors.request.use(
+    async (config) => {
+        try {
+            const token = await SecureStore.getItemAsync('authToken');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+        } catch (err) {
+            console.warn('Error reading token from SecureStore:', err);
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
 // Response interceptor
 api.interceptors.response.use(
     (res) => res,
     async (error) => {
+
+        if (!error || !error.config) {
+            handleApiError(error);
+            return Promise.reject(error);
+        }
+
         const originalRequest = error.config;
 
         const isUnauthorized = error?.response?.status === 401;
