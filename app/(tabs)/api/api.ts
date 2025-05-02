@@ -6,7 +6,7 @@ import {useExternalLogout} from "@/app/(tabs)/auth/AuthContext";
 import Toast from "react-native-toast-message";
 
 const api = axios.create({
-    baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080/api', // update for your backend URL
+    baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://192.168.68.105:8080/api', // update for your backend URL
     headers: {
         'Content-Type': 'application/json',
     },

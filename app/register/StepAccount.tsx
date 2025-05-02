@@ -54,7 +54,7 @@ export default function StepAccount({ onNext }: Readonly<{ onNext: () => void }>
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={{ flex: 1, justifyContent: 'space-between' }}>
+            <View style={{ flex: 1, justifyContent: 'space-between' }} >
                 <ScrollView
                     contentContainerStyle={{
                         paddingHorizontal: 24,

@@ -27,7 +27,10 @@ export default function AnimatedStep({ children, step, currentStep }: Readonly<P
     const isActive = step === currentStep;
 
     return (
-        <View style={[styles.wrapper, !isActive && styles.hidden]}>
+        <View
+            style={[styles.wrapper, !isActive && styles.hidden]}
+            pointerEvents={isActive ? 'auto' : 'none'}
+        >
             <Animated.View style={[styles.container, animatedStyle]}>
                 {children}
             </Animated.View>
