@@ -2,6 +2,7 @@ import { Slot, useRouter, useSegments } from 'expo-router';
 import {AuthProvider, useAuth} from '@/app/(tabs)/auth/AuthContext';
 import { useEffect } from 'react';
 import AuthGuard from "@/app/(tabs)/auth/AuthGuard";
+import Toast from "react-native-toast-message";
 
 function ProtectedLayout() {
     const { token, loading } = useAuth();
@@ -29,6 +30,7 @@ export default function Layout() {
         <AuthProvider>
             <AuthGuard>
                 <Slot />
+                <Toast />
             </AuthGuard>
         </AuthProvider>
     );

@@ -36,8 +36,8 @@ export default function LoginScreen() {
             setSubmitting(true);
             await login(email, password);
             // Optionally: router.replace('/home');
-        } catch (err) {
-            handleApiError(err); // ✅ toast + log
+        } catch (err: any) {
+            handleApiError(err);
         } finally {
             setSubmitting(false);
         }
