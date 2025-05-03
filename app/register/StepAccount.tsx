@@ -13,7 +13,7 @@ import AuthTextInput from '@/components/Auth/AuthTextInput';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {useRegister} from "@/app/register/RegisterContext";
 import {globalStyles} from "@/app/design/globalStyles";
-import {registerAccount} from "@/app/(tabs)/api/auth";
+import {registerAccount} from "@/app/api/auth";
 import { handleApiError } from '@/app/utils/errors';
 
 

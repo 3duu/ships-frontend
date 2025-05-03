@@ -1,5 +1,5 @@
 import axios from './api'; // shared axios instance
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from '@/app/(tabs)/auth/SafeSecureStore';
 
 export interface Location {
     type: string;
@@ -36,17 +36,19 @@ export async function logoutFromServer() {
 }
 
 export async function registerAccount(name: string, email: string, password: string) {
-    const response : LoginResponse  = await axios.post('public/auth/register', { name, email, password });
-    await SecureStore.setItemAsync('authToken', response.token);
-    await SecureStore.setItemAsync('refreshToken', response.refreshToken);
+    const response  = await axios.post('public/auth/register', { name, email, password });
+    await SecureStore.setItemAsync('authToken', response.data.token);
+    await SecureStore.setItemAsync('userId', response.data.user.id);
+    await SecureStore.setItemAsync('refreshToken', response.data.refreshToken);
     return response;
 }
 
-export async function login(email: string, password: string): Promise<LoginResponse> {
-    const response : LoginResponse = await axios.post('public/auth/login', { email, password });
-    await SecureStore.setItemAsync('authToken', response.token);
-    await SecureStore.setItemAsync('userId', response.user.id);
-    await SecureStore.setItemAsync('refreshToken', response.refreshToken);
+export async function login(email: string, password: string) {
+    const response = await axios.post('public/auth/login', { email, password });
+    const user : User = response.data.user;
+    await SecureStore.setItemAsync('authToken', response.data.token);
+    await SecureStore.setItemAsync('userId', user.id);
+    await SecureStore.setItemAsync('refreshToken', response.data.refreshToken);
     return response;
 }
 

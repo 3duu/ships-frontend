@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { handleApiError } from '@/app/utils/errors';
-import * as SecureStore from 'expo-secure-store';
 import { refreshToken as requestRefreshToken } from './auth';
 import {useExternalLogout} from "@/app/(tabs)/auth/AuthContext";
 import Toast from "react-native-toast-message";
+import * as SecureStore from '@/app/(tabs)/auth/SafeSecureStore';
 
 const api = axios.create({
     baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://192.168.68.105:8080/api', // update for your backend URL
@@ -46,6 +46,7 @@ api.interceptors.response.use(
     async (error) => {
 
         if (!error || !error.config) {
+            console.error('Error retrieving response from SecureStore:', error);
             handleApiError(error);
             return Promise.reject(error);
         }

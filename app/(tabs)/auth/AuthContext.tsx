@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {login as apiLogin, logoutFromServer, registerAccount as apiRegister} from '@/app/(tabs)/api/auth';
-import axios from '@/app/(tabs)/api/api';
-import * as SecureStore from '../auth/SafeSecureStore';
+import {login as apiLogin, logoutFromServer, registerAccount as apiRegister} from '@/app/api/auth';
+import axios from '@/app/api/api';
+import * as SecureStore from '@/app/(tabs)/auth/SafeSecureStore';
 import {router} from "expo-router";
 
 
@@ -51,7 +51,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const login = async (email: string, password: string) => {
 
         const res = await apiLogin(email, password);
-
         setToken(res.token);
         setUserId(res.user.id);
         axios.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
@@ -96,6 +95,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
+
     if (!context) {
         throw new Error('useAuth must be used inside an AuthProvider');
     }
