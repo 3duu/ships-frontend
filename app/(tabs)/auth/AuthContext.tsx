@@ -51,21 +51,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const login = async (email: string, password: string) => {
 
         const res = await apiLogin(email, password);
-        setToken(res.token);
+        setToken(res.authToken);
         setUserId(res.user.id);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${res.authToken}`;
 
-        await SecureStore.setItemAsync('authToken', res.token);
+        await SecureStore.setItemAsync('authToken', res.authToken);
         await SecureStore.setItemAsync('userId', res.user.id);
     };
 
     const register = async (name: string, email: string, password: string) => {
         const res = await apiRegister(name, email, password);
-        setToken(res.token);
+        setToken(res.authToken);
         setUserId(res.user.id);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${res.authToken}`;
 
-        await SecureStore.setItemAsync('authToken', res.token);
+        await SecureStore.setItemAsync('authToken', res.authToken);
         await SecureStore.setItemAsync('userId', res.user.id);
     };
 
@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         delete axios.defaults.headers.common['Authorization'];
         await SecureStore.deleteItemAsync('authToken');
         await SecureStore.deleteItemAsync('refreshToken');
-        await SecureStore.deleteItemAsync('userID');
+        await SecureStore.deleteItemAsync('userId');
 
         router.replace('/login');
     };

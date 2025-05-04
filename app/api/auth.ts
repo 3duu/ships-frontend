@@ -21,7 +21,7 @@ export interface User {
 }
 
 export interface LoginResponse {
-    token: string;
+    authToken: string;
     refreshToken: string;
     user: User;
 }
@@ -35,21 +35,32 @@ export async function logoutFromServer() {
     return axios.post('auth/auth/logout');
 }
 
-export async function registerAccount(name: string, email: string, password: string) {
-    const response  = await axios.post('public/auth/register', { name, email, password });
-    await SecureStore.setItemAsync('authToken', response.data.token);
-    await SecureStore.setItemAsync('userId', response.data.user.id);
-    await SecureStore.setItemAsync('refreshToken', response.data.refreshToken);
-    return response;
+export async function registerAccount(name: string, email: string, password: string): Promise<LoginResponse> {
+    const { data } = await axios.post<LoginResponse>('public/auth/register', { name, email, password });
+
+    if (!data?.user?.id) {
+        throw new Error('Invalid API response: missing user.id');
+    }
+
+    await SecureStore.setItemAsync('authToken', data.authToken);
+    await SecureStore.setItemAsync('userId', data.user.id);
+    await SecureStore.setItemAsync('refreshToken', data.refreshToken);
+
+    return data;
 }
 
-export async function login(email: string, password: string) {
-    const response = await axios.post('public/auth/login', { email, password });
-    const user : User = response.data.user;
-    await SecureStore.setItemAsync('authToken', response.data.token);
-    await SecureStore.setItemAsync('userId', user.id);
-    await SecureStore.setItemAsync('refreshToken', response.data.refreshToken);
-    return response;
+export async function login(email: string, password: string): Promise<LoginResponse> {
+    const { data } = await axios.post<LoginResponse>('public/auth/login', { email, password });
+
+    if (!data?.user?.id) {
+        throw new Error('Invalid API response: missing user.id');
+    }
+
+    await SecureStore.setItemAsync('authToken', data.authToken);
+    await SecureStore.setItemAsync('userId', data.user.id);
+    await SecureStore.setItemAsync('refreshToken', data.refreshToken);
+
+    return data;
 }
 
 export async function refreshToken(refreshToken: string) {
