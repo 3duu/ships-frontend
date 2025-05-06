@@ -7,6 +7,7 @@ export async function getItemAsync(key: string): Promise<string | null> {
     }
 
     try {
+        console.log(key);
         return SecureStore.getItemAsync(key);
     } catch (err) {
         console.error('[SecureStore App Error]' + ' - ' + key, err);
@@ -25,7 +26,10 @@ export async function setItemAsync(key: string, value: string): Promise<void> {
         }
     }
     try {
-        return SecureStore.setItemAsync(key, value);
+        if (value){
+            return SecureStore.setItemAsync(key, value);
+        }
+
     } catch (err) {
         console.error('[SecureStore App Error]' + ' - ' + key, err);
         return Promise.reject(err);
@@ -38,5 +42,6 @@ export async function deleteItemAsync(key: string): Promise<void> {
         localStorage.removeItem(key);
         return Promise.resolve();
     }
+    console.log(key);
     return SecureStore.deleteItemAsync(key);
 }

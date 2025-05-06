@@ -6,7 +6,7 @@ import Toast from "react-native-toast-message";
 import * as SecureStore from '@/app/(tabs)/auth/SafeSecureStore';
 
 const api = axios.create({
-    baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://192.168.68.105:8080/api', // update for your backend URL
+    baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://192.168.68.108:8080/api', // update for your backend URL
     headers: {
         'Content-Type': 'application/json',
     },
@@ -83,7 +83,7 @@ api.interceptors.response.use(
 
             try {
                 const data = await requestRefreshToken(refresh);
-                await SecureStore.setItemAsync('authToken', data.token);
+                await SecureStore.setItemAsync('authToken', data.authToken);
                 if (data.refreshToken) {
                     await SecureStore.setItemAsync('refreshToken', data.refreshToken);
                 }
