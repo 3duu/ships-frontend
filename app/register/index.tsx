@@ -8,6 +8,7 @@ import { View, ImageBackground, KeyboardAvoidingView, Platform } from 'react-nat
 import { globalStyles } from "@/app/design/globalStyles";
 import {RegisterProvider} from "@/app/register/RegisterContext";
 import AnimatedStep from '../../components/AnimatedSteps';
+import StepInterests from "@/app/register/StepInterests";
 
 export default function RegisterScreen() {
     const [step, setStep] = useState(0);
@@ -39,6 +40,10 @@ export default function RegisterScreen() {
                <AnimatedStep step={1} currentStep={step}>
                    <StepProfile onNext={handleNext} onBack={handleBack} />
                </AnimatedStep>
+
+                <AnimatedStep step={2} currentStep={step}>
+                    <StepInterests onNext={handleNext} onBack={handleBack} />
+                </AnimatedStep>
 
                 </KeyboardAvoidingView>
             </ImageBackground>

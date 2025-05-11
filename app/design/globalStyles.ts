@@ -167,7 +167,10 @@ export const globalStyles = StyleSheet.create({
     scrollContent: {
         padding: 24,
         flexGrow: 1,
-    }
+    },
+    top: {
+        flex: 1,
+    },
 });
 
 

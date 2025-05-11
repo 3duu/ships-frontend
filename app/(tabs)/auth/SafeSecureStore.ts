@@ -7,7 +7,7 @@ export async function getItemAsync(key: string): Promise<string | null> {
     }
 
     try {
-        console.log(key);
+        //console.log(key);
         return SecureStore.getItemAsync(key);
     } catch (err) {
         console.error('[SecureStore App Error]' + ' - ' + key, err);
